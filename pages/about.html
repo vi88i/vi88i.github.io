@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>About</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./about.css">    
+  </head>
+  <body>
+    <div class="dp">
+      <img src="../assets/me.jpg">
+    </div>
+    <div class="introduction">
+      <p>Vighnesh Nayak S</p>
+      <p>I like programming & playing chess and football</p>
+      <p>I want to work on software products that are used by many people</p>
+    </div>
+    <hr>
+    <nav class="navbar">
+      <li id="edu-nav" onclick="loadSection('edu')">Education</li>
+      <li id="exp-nav" onclick="loadSection('exp')">Experience</li>
+      <!-- <li id="proj-nav" onclick="loadSection('proj')">Projects</li> -->
+    </nav>
+    <div id="edu" class="card">
+      <h1 class="title">Education</h1>
+      <div class="main">
+        <div class="item">
+          <div class="name-and-duration">
+            <div class="name">
+              <p>Manipal Institute of Technology, 9.12 CGPA</p>
+            </div>
+            <div class="duration">
+              <p>Jun 2018 - Present</p>
+            </div>          
+          </div>
+          <ul class="summary">
+            <li>Major in Computer and Communication Engineering</li>
+            <li>Minor in Computational Intelligence</li>
+            <li>Research in Computerized Medical Imaging (<a href="https://ieeexplore.ieee.org/abstract/document/9611261/">paper</a>)</li>
+            <li>Studied core CS subjects like Operating System, Computer Networks, Data Structures and Algorithms, Database Management System etc.</li>
+          </ul>
+        </div>
+        <div class="item">
+          <div class="name-and-duration">
+            <div class="name">
+              <p>Little Rock Indian School</p>
+            </div>
+            <div class="duration">
+              <p>Jun 2016 - May 2018</p>
+            </div>          
+          </div>
+          <ul class="summary">
+            <li>Higher secondary in Computer Science</li>
+            <li>Feel in love with programming</li>
+          </ul>
+        </div>        
+      </div>      
+    </div>
+    <div id="exp" class="card">
+      <h1 class="title">Experience</h1>
+      <div class="main">
+        <div class="item">
+          <div class="name-and-duration">
+            <div class="name">
+              <p>Citrix R&D India, KA</p>
+            </div>
+            <div class="duration">
+              <p>Jan 2022 - Present</p>
+            </div>          
+          </div>
+          <div class="role">
+            <p>Software Engineer Intern</p>
+          </div>
+          <ul class="summary">
+            <li>Bug fixes and feature development on the frontend for ADM Analytics</li>
+            <li>Tech stack: JavaScript, CSS, JSX, React</li>
+          </ul>
+        </div>
+        <div class="item">
+          <div class="name-and-duration">
+            <div class="name">
+              <p>Samsung R&D Bangalore, KA</p>
+            </div>
+            <div class="duration">
+              <p>Jun 2021 - Jul 2021</p>
+            </div>          
+          </div>
+          <div class="role">
+            <p>Student Trainee</p>
+          </div>
+          <ul class="summary">
+            <li>Designed and developed a tool to increase productivity of engineers during log file analysis</li>
+            <li>Coded web APIs using Flask to create an interface to access the host file system</li>
+            <li>Tech stack: Python, Electron, React, Flask</li>
+          </ul>
+        </div>
+        <div class="item">
+          <div class="name-and-duration">
+            <div class="name">
+              <p>Blackfrog Technologies Pvt. Ltd., KA</p>
+            </div>
+            <div class="duration">
+              <p>May 2020 - Jun 2020</p>
+            </div>          
+          </div>
+          <div class="role">
+            <p>Backend Developer Intern</p>
+          </div>
+          <ul class="summary">
+            <li>Reduced page load time of real-time monitoring dashboard using Redis</li>
+            <li>Designed data pipeline to ingest raw data of IoT devices in real-time</li>
+            <li>Deployed backend system on AWS EC2 and configured NGINX as API gateway</li>
+            <li>Tech stack: Node, Vue, PostgreSQL, Redis</li>
+          </ul>
+        </div>
+      </div>                  
+    </div>
+    <!-- <div id="proj" class="card"></div> -->
+    <script>
+      const sections = ["edu", "exp"];
+
+      function hideSections() {
+        sections.forEach((e) => {
+          document.getElementById(e).style.display = "none";
+          document.getElementById(e + "-nav").removeAttribute("active");          
+        });        
+      }
+
+      function loadSection(v) {
+        hideSections();
+        document.getElementById(v).style.display = "block ";
+        document.getElementById(v + "-nav").setAttribute("active", "true");
+      }
+
+      window.addEventListener("load", function() {
+        loadSection(sections[0]);
+      });
+    </script>
+  </body>
+</html>

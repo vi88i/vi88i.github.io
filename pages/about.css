@@ -1,0 +1,134 @@
+*::after,
+*::before,
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  user-select: none;
+  font-family: 'Fira Code', monospace;
+  background-color: #ddd;
+  display: grid;
+  place-items: center;
+}
+
+body:last-child {
+  margin-bottom: 1em;
+}
+
+.card {
+  align-self: start;
+
+  background-color: #eee;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px #bbb;
+  width: 95%;
+  padding: 1em;
+  margin: 1em;
+}
+
+.card .title {
+  text-align: left;
+  font-size: 50px;
+}
+
+.card .main {
+  display: grid;
+  gap: 1em 1em;
+}
+
+.card .item {
+  background-color: #fff;
+  padding: 1em;
+  border-radius: 5px;
+}
+
+.card .item .name-and-duration {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.card .item .name-and-duration .name {
+  font-weight: 900;
+  font-size: 20px;
+}
+
+.card .item .summary {
+  padding: 1em;
+}
+
+.card .item .role {
+  font-weight: 600;
+  margin: 0;
+}
+
+.dp {
+  text-align: center;
+}
+
+.dp img {
+  width: 50%;
+  border-radius: 50%;
+  margin-top: 1em;
+}
+
+.navbar {
+  width: 50%;
+  font-weight: bolder;
+  font-size: 20px;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 4px solid yellowgreen;
+  text-align: center;
+  margin: 1em;
+}
+
+.navbar li {
+  cursor: pointer;
+  flex-grow: 1;
+  padding: 0.4em;
+  background-color: transparent;
+  position: relative;
+}
+
+.navbar li::after {
+  content: '';
+  position: absolute;
+  border-bottom: 4px solid purple;
+  display: block;
+  margin: 0 auto;
+  width: 0;
+  top: 41px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  transition: width ease 1000ms;
+}
+
+.navbar li[active="true"]::after {
+  content: '';
+  position: absolute;
+  border-bottom: 4px solid purple;
+  display: block;
+  margin: 0 auto;
+  top: 41px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  width: 100%;
+}
+
+.navbar li[active="true"] {
+  box-shadow: 0px 0px 2px #000;
+}
+
+.introduction {
+  text-align: center;
+}
