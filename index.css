@@ -1,0 +1,99 @@
+*::after,
+*::before,
+* {
+  box-sizing: border-box;
+}
+
+body {
+  user-select: none;
+  font-family: 'Fira Code', monospace;
+  background-color: #eee;
+  height: 100vh;  
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  } 
+  to {
+    width: 100vh;
+  } 
+}
+
+@keyframes menu-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.intro * {
+  width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  margin: 0 auto;  
+}
+
+.intro-1 {
+  animation-name: typing;
+  animation-duration: 1000ms;
+  animation-fill-mode: forwards;
+}
+
+.intro-2 {
+  animation-name: typing;
+  animation-duration: 1000ms;
+  animation-delay: 1000ms;
+  animation-fill-mode: forwards;
+}
+
+.intro-3 {
+  animation-name: typing;
+  animation-duration: 1000ms;
+  animation-delay: 2000ms;
+  animation-fill-mode: forwards;
+}
+
+.intro-4 {
+  animation-name: typing;
+  animation-duration: 1000ms;
+  animation-delay: 3000ms;
+  animation-fill-mode: forwards;
+}
+
+.menu-grid {
+  align-self: stretch;
+
+  width: 50vh;
+  height: min-content;
+  color: white;
+  display: grid;
+  gap: 1em 1em;
+  place-items: center;
+  opacity: 0;
+
+  animation-name: menu-fade-in;
+  animation-delay: 4000ms;
+  animation-duration: 1000ms;
+  animation-fill-mode: forwards;
+}
+
+.menu-grid .menu-grid-item {
+  background-color: black;
+  justify-self: stretch;
+  border-radius: 50px;  
+  cursor: pointer;
+  text-align: center;  
+}
+
+.menu-grid .menu-grid-item:hover {
+  background-color: white;
+  color: black;
+  box-shadow: 0px 0px 10px #bbb;  
+}
