@@ -26,13 +26,17 @@
       <div class="menu-grid-item" onclick="loadAbout()">
         <h2>About</h2>
       </div>
-      <div class="menu-grid-item">
+      <div class="menu-grid-item" onclick="loadBlog()">
         <h2>Blog</h2>
       </div>
     </div>
     <script>
       function loadAbout() {
         window.location.assign("/pages/about.html");
+      }
+
+      function loadBlog() {
+        window.location.assign("/blogs/index.html");
       }
     </script>
   </body>
