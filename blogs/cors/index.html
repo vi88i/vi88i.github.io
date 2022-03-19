@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Fix CORS error without any additional package</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="Vighnesh Nayak S">
+    <meta name="author" content="Vighnesh Nayak S">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="../../assets/favicon/site.webmanifest">    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/monokai-sublime.min.css" integrity="sha512-ade8vHOXH67Cm9z/U2vBpckPD1Enhdxl3N05ChXyFx5xikfqggrK4RrEele+VWY/iaZyfk7Bhk6CyZvlh7+5JQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js" integrity="sha512-BNc7saQYlxCL10lykUYhFBcnzdKMnjx5fp5s5wPucDyZ7rKNwCoqJh1GwEAIhuePEK4WM9askJBRsu7ma0Rzvg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/languages/bash.min.js" integrity="sha512-gXQ69/0a3+hfqM8YwiRW6mK7SIi6bSO2dXmFatm9ct/zD0etY70SdUJgBtATMQgB8O9gn7hwo6RklHaGlg2b+A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/languages/javascript.min.js" integrity="sha512-I9gpHTedDJcVkfGpzBuyrSHeNIsI9ShXYUMxA4X1Yp3JSoPqRuhdJMnd+2zbPCwACbBjcigjjdokhxv7TBXQVw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/languages/http.min.js" integrity="sha512-PByVUldc7sjajfruhAGUbWWosq8vuqw2OCfazPjINkxLTHnko6Pi63ZYRxEJ4D8tevOLQy43Gf0TQJgGT7Lsdg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
+    <link rel="stylesheet" href="./index.css">    
+  </head>
+  <body>
+    <div class="main-container">
+      <h1><u>Fix CORS error without any additional package</u></h1>
+      <div class="cards">
+        <div class="card">
+          <h2>Introduction</h2>
+          <p>
+            An <b>origin</b> consists of <b>protocol</b>, <b>hostname</b> (IP or domain name) and <b>port</b>.
+            We say two origin to be different if any one attribute differs. 
+          </p>
+          <div class="code-container">
+            <div class="code-snippet">
+                <pre>
+                  <code class="language-bash">
+curl -i https://github.com
+# (protocol, hostname, port) = (https, github, 443) 
+# Compare localhost:8080 and localhost:8081 => (http, localhost, 8080) != (http, localhost, 8081)
+                  </code>
+                </pre>
+            </div>
+          </div>          
+          <p>
+            A request originating from <b>script</b> within a <b>document</b> is termed as <b>cross-origin</b> request, if it requests for a resource from an origin which is different from the origin which loaded the document and scripts.  
+            If server is not configured to handle <b>C</b>ross-<b>O</b>rigin <b>R</b>esource <b>S</b>haring, then browser blocks cross-origin requests by citing CORS policy violation.
+            CORS is a mechanism in which browser and server play a part to enable cross-origin resource sharing by bypassing <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">Same Origin Policy</a>, and allow resource sharing between <b>trusted</b> origins only.
+          </p>
+          <br>
+          <p>
+            When a browser detects a cross-origin request, it first need to check if cross-origin request is <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#simple_requests"><b>simple</b></a> or not.
+            If a request is deemed not simple, a <b>pre-flight</b> request is sent to server using <code><b>OPTIONS</b></code> method type. This request contains all the information which made the request not simple.
+            If the server is configured to handle <code>OPTIONS</code> method type, it responds with list of <b>safe</b> headers and method types that can be present in cross-origin request. It should be noted that if the request is simple, the pre-flight request is skipped and browser directly moves ahead with making cross-origin request.
+          </p>
+          <br>
+          <p>
+            Let's consider an example which triggers a pre-flight request (or makes the request non-simple),
+          </p>
+          <div class="code-container">
+            <div class="code-snippet">
+                <pre>
+                  <code class="language-javascript">
+// assume this function is invoked from http://127.0.0.1:8080                     
+async function getQuote() {
+  try {
+    const response = await fetch('http://127.0.0.1:8081/quote', {
+      method: 'PUT', // GET, POST, HEAD don't trigger pre-flight
+      mode: 'cors',
+      cache: 'no-store',
+      credentials: 'include',
+      headers: {
+        'Accept' : 'application/json',
+        'Content-Type': 'application/json',
+        'X-Trigger-CORS': 'Any custom header in cross-origin request triggers CORS pre-flight',
+      },
+      body: JSON.stringify({ name: 'vi88i' }),
+    });
+    if (response.ok) {
+      const body = await response.json();
+      document.getElementById("res").innerHTML = body.quote; 
+    } else {
+      console.log(response.statusText);
+    }
+  } catch (err) {
+    console.log(err);
+  }
+} 
+                  </code>
+                </pre>
+            </div>
+          </div>          
+        </div>
+        <div class="card">
+          <h2>Handling pre-flight request (Node.js - Express)</h2>
+          <p>
+            Let's see how we can handle <code>OPTIONS</code> method type. <code><b>Access-Control-Request-*</b></code> headers are inserted by browser, which contains the request headers that triggered pre-flight request.
+          </p>
+          <div class="code-container">
+            <div class="code-snippet">
+                <pre>
+                  <code class="language-http"> 
+Access-Control-Request-Method: PUT
+Access-Control-Request-Headers: Content-Type, X-Trigger-CORS
+                  </code>
+                </pre>
+            </div>
+          </div>
+          <p>
+            The browser can inspect the aforementioned headers and decide what it wants to do. Otherwise we can configure a default response which can handle all type of pre-flight request (like the one below). 
+          </p>          
+          <div class="code-container">
+            <div class="code-snippet">
+                <h4>index.js</h4>
+                <pre>
+                  <code class="language-javascript">
+// Handle OPTIONS method type for all resources/paths 
+app.options('/*', (req, res) => {
+  // Depending on Access-Control-Request-* and origin we can write logic to decide if origin is allowed
+  // here I'm approving all origin without any checks
+  res.header('Access-Control-Allow-Origin', req.get('Origin'));
+  // List of allowed methods
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
+  // List of allowed headers (which made the request non-simple) in cross-origin request 
+  res.header('Access-Control-Allow-Headers', 'Content-Type, X-Trigger-CORS, X-SOMETHING-ELSE');
+  // Whether cross-origin request is allowed to include credentials a.k.a cookies
+  res.header('Access-Control-Allow-Credentials', true);
+  // Cache pre-flight request if needed
+  res.header('Access-Control-Max-Age', 0);
+  // 204 tells the browser that request is successful but there is no content 
+  res.status(204).end();
+});
+                  </code>
+                </pre>
+            </div>
+          </div>
+          <p>
+            Now on the client side, the browser checks all <code><b>Access-Control-Allow-*</b></code> headers received as a response for pre-flight request and checks if it got the approval for to make cross-origin request.
+            For example if we received,
+          </p>          
+          <div class="code-container">
+            <div class="code-snippet">
+                <pre>
+                  <code class="language-http"> 
+Access-Control-Allow-Headers: Content-Type
+                  </code>
+                </pre>
+            </div>
+          </div>
+          <p>
+            We see that <code><b>X-Trigger-CORS</b></code> is not present in list of allowed headers. This indicates that something bad can happen if cross-origin request is made, so the browser blocks the cross-origin request.
+            After all checks if there are no issues, the next step is to go ahead with cross-origin request (browser directly jumps to this step, if cross-origin request is simple).
+          </p>          
+        </div>
+        <div class="card">
+          <h1>Making the actual cross-origin request</h1>
+          <p>
+            The CORS mechanism doesn't end here even though we got approval in pre-flight response. The response of cross-origin request must again include,            
+          </p>
+          <div class="code-container">
+            <div class="code-snippet">
+                <pre>
+                  <code class="language-http"> 
+Access-Control-Allow-Origin: http://127.0.0.1:8080
+Access-Control-Allow-Credentials: true
+                  </code>
+                </pre>
+            </div>
+          </div>
+          <p>
+            In Node.js this can be included by adding the following middleware,
+          </p>
+          <div class="code-container">
+            <div class="code-snippet">
+                <h4>index.js</h4>
+                <pre>
+                  <code class="language-javascript"> 
+app.use((req, res, next) => {
+  if (req.headers.origin !== req.headers.host) {
+    res.header('Access-Control-Allow-Origin', req.get('Origin'));
+    // if cookies was allowed in the request
+    res.header('Access-Control-Allow-Credentials', true);
+  }
+  next();
+});
+                  </code>
+                </pre>
+            </div>
+          </div>
+          <p>
+            The browser checks if the <code>Access-Control-Allow-Origin</code> contains <code>*</code> or origin of document. And it also checks <code>Access-Control-Allow-Credentials</code> to see if cross-origin request was allowed to send the cookies. If any checks fail, the body received is not made available for consumption.
+          </p>                    
+        </div>
+      </div>
+    </div>
+    <div class="ref">
+      <h3>References</h3>
+      <ul>
+        <li>1. <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS" target="_blank">CORS</a></li>
+        <li>2. <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin" target="_blank">Origin</a></li>        
+      </ul>
+    </div>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

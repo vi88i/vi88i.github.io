@@ -1,0 +1,20 @@
+*::after,
+*::before,
+* {
+  box-sizing: border-box;
+}
+
+body {
+  user-select: none;
+  font-family: 'Fira Code', monospace;
+  background-color: #eee;
+  height: 100vh;  
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: decimal;
+}
