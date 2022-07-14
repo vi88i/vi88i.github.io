@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JS: Prevent that = this</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="Vighnesh Nayak S">
+    <meta name="author" content="Vighnesh Nayak S">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="../../assets/favicon/site.webmanifest">    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/monokai-sublime.min.css" integrity="sha512-ade8vHOXH67Cm9z/U2vBpckPD1Enhdxl3N05ChXyFx5xikfqggrK4RrEele+VWY/iaZyfk7Bhk6CyZvlh7+5JQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js" integrity="sha512-BNc7saQYlxCL10lykUYhFBcnzdKMnjx5fp5s5wPucDyZ7rKNwCoqJh1GwEAIhuePEK4WM9askJBRsu7ma0Rzvg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/languages/bash.min.js" integrity="sha512-gXQ69/0a3+hfqM8YwiRW6mK7SIi6bSO2dXmFatm9ct/zD0etY70SdUJgBtATMQgB8O9gn7hwo6RklHaGlg2b+A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/languages/javascript.min.js" integrity="sha512-I9gpHTedDJcVkfGpzBuyrSHeNIsI9ShXYUMxA4X1Yp3JSoPqRuhdJMnd+2zbPCwACbBjcigjjdokhxv7TBXQVw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/languages/http.min.js" integrity="sha512-PByVUldc7sjajfruhAGUbWWosq8vuqw2OCfazPjINkxLTHnko6Pi63ZYRxEJ4D8tevOLQy43Gf0TQJgGT7Lsdg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
+    <link rel="stylesheet" href="./index.css">    
+  </head>
+  <body>
+    <div class="main-container">
+      <h1><u>JS: Prevent that = this</u></h1>
+      <div class="cards">
+        <div class="card">
+          <h2>Case study</h2>
+          <br>
+          <p>
+            Given below is a simple Object generating function. And I want to print my <i>name</i> attribute inside the function <i>actions.speak</i>. For some reason <i>actions.speaks</i> is not
+            possible to find <i>name</i> property. 
+          </p> 
+          <div class="code-container">
+            <div class="code-snippet">
+                <pre>
+                  <code class="language-javascript"> 
+function Employee() {
+  this.name = "Vighnesh";
+  this.bio = "Hire me";
+  this.skills = ["Problem Solving Using Copmuters"];
+  this.actions = {
+    sleep: function() {
+      console.log(`I'm going to sleep`);
+    },
+    speak: function() {
+      console.log(`I'm ${this.name}`);
+    }
+  };
+}
+
+let e = new Employee();
+e.actions.speak();
+// Output:
+// I'm undefined
+                  </code>
+                </pre>
+            </div>
+          </div>
+          <p>
+            In order to debug, we can add <i>console.log(this)</i> in <i>actions.speak</i> and in the global scope of <i>Employee</i>. For those who are learning JavaScript, and having some experience in C++
+            or Python you'll be expecting <i>this</i> to be same in both cases. But in JavaScript <i>this</i> works a bit differently. 
+          </p>        
+          <div class="code-container">
+            <div class="code-snippet">
+                <pre>
+                  <code class="language-javascript"> 
+function Employee() {
+  this.name = "Vighnesh";
+  this.bio = "Hire me";
+  this.skills = ["Problem Solving Using Copmuters"];
+  this.actions = {
+    sleep: function() {
+      console.log(`I'm going to sleep`);
+    },
+    speak: function() {
+      console.log(this);
+      console.log(`I'm ${this.name}`);
+    }
+  };
+  console.log(this);
+}
+
+let e = new Employee();
+e.actions.speak();
+
+/*
+// Output
+{
+  actions: {
+    sleep: function() {
+        console.log(`I'm going to sleep`);
+      },
+    speak: function() {
+        console.log(this);
+        console.log(`I'm ${this.name}`);
+      }
+  },
+  bio: "Hire me",
+  name: "Vighnesh",
+  skills: ["Problem Solving Using Copmuters"]
+}
+
+{
+  sleep: function() {
+      console.log(`I'm going to sleep`);
+    },
+  speak: function() {
+      console.log(this);
+      console.log(`I'm ${this.name}`);
+    }
+}
+*/
+                  </code>
+                </pre>
+            </div>
+          </div>
+          <p>
+            The quick (but bad) solution for this would be to store a copy of <i>this</i> in some variable and access it within <i>actions.speaks</i>. This defintely works although
+            it is not clean code.
+          </p>
+          <div class="code-container">
+            <div class="code-snippet">
+                <pre>
+                  <code class="language-javascript"> 
+function Employee() {
+  this.name = "Vighnesh";
+  this.bio = "Hire me";
+  this.skills = ["Problem Solving Using Copmuters"];
+  let that = this;
+  this.actions = {
+    sleep: function() {
+      console.log(`I'm going to sleep`);
+    },
+    speak: function() {
+      console.log(`I'm ${that.name}`);
+    }
+  };
+}
+
+let e = new Employee();
+e.actions.speak();
+// Output:
+// I'm Vighnesh
+                  </code>
+                </pre>
+            </div>
+          </div>          
+        </div>
+        <div class="card">
+          <h2>Why this happened?</h2>
+          <br>
+          <p>
+            <i>this</i> references the object which is currently calling the function. In this case object <i>e.actions</i> is calling the function <i>speak</i>. This means
+            that any usage of <i>this</i> witihn <i>e.actions.speak</i> will actually refer to object <i>e.actions</i> and not <i>e</i>. In order to access <i>e</i>, we stored copy
+            of <i>e</i> in <i>that</i>. 
+          </p>
+        </div>
+        <div class="card">
+          <h2>How to handle it cleanly?</h2>
+          <br>
+          <h3>1. Arrow functions</h3>
+          <br>
+          <div class="code-container">
+            <div class="code-snippet">
+                <pre>
+                  <code class="language-javascript"> 
+function Employee() {
+  this.name = "Vighnesh";
+  this.bio = "Hire me";
+  this.skills = ["Problem Solving Using Copmuters"];
+  this.actions = {
+    sleep: function() {
+      console.log(`I'm going to sleep`);
+    },
+    speak: () => {
+      console.log(`I'm ${this.name}`);
+    }
+  };
+}
+
+let e = new Employee();
+e.actions.speak();
+// Output:
+// I'm Vighnesh
+                  </code>
+                </pre>
+            </div>
+          </div>
+          <p>
+            In arrow function, <i>this</i> is inherited from context where it was defined i.e, Employee object.
+          </p>
+          <br>
+          <h3>2. <i>bind</i></h3>
+          <br>
+          <div class="code-container">
+            <div class="code-snippet">
+                <pre>
+                  <code class="language-javascript"> 
+function Employee() {
+  this.name = "Vighnesh";
+  this.bio = "Hire me";
+  this.skills = ["Problem Solving Using Copmuters"];
+  this.actions = {
+    sleep: function() {
+      console.log(`I'm going to sleep`);
+    },
+    speak: function() {
+      console.log(`I'm ${this.name}`);
+    }
+  };
+  this.actions.speak = this.actions.speak.bind(this);
+}
+
+let e = new Employee();
+e.actions.speak();
+                  </code>
+                </pre>
+            </div>
+          </div>
+          <p>
+            <i>bind</i> returns a new function, where the <i>this</i> inside the function is set to the object passed as parameter.
+          </p>
+          <br>
+          <h3>3. <i>call</i></h3>
+          <br>
+          <div class="code-container">
+            <div class="code-snippet">
+                <pre>
+                  <code class="language-javascript"> 
+function Employee() {
+  this.name = "Vighnesh";
+  this.bio = "Hire me";
+  this.skills = ["Problem Solving Using Copmuters"];
+  this.actions = {
+    sleep: function() {
+      console.log(`I'm going to sleep`);
+    },
+    speak: function() {
+      console.log(`I'm ${this.name}`);
+    }
+  };
+}
+
+let e = new Employee();
+e.actions.speak.call(e);
+                  </code>
+                </pre>
+            </div>
+          </div>
+          <p>
+            <i>call</i> will set <i>this</i> inside the function to the object that is passed as parameter.
+          </p>                          
+        </div>         
+      </div>
+    </div>
+    <!-- <div class="ref">
+      <h3>References</h3>
+      <ul>
+        <li>1. <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS" target="_blank">CORS</a></li>
+        <li>2. <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin" target="_blank">Origin</a></li>        
+      </ul>
+    </div> -->
+    <p style="display: flex; flex-direction: column; align-items: center; ">If there is any mistake, please let me know. Happy coding!</p>
+    <br>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>
